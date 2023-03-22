@@ -1,0 +1,291 @@
+<div id="id01">
+{% extends 'base.html' %}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Add icon library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>My To Do List</title>
+    </head>
+    <body>
+      {% block content %}
+        <style>
+            body {font-family: palantino, serif;}
+* {box-sizing: border-box;}
+
+.open-button {
+  background-color: #faeded;
+  color: rgb(14, 13, 13);
+  padding: 15px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  align-items: center;
+  /* position: fixed; */
+  width:85%;
+  
+
+}
+.center {
+  position: absolute;
+  margin: auto;
+  width: 80%;
+  padding: 30px;
+  left:15%;
+  top:20%;
+  /* background-color: #F6FFEF;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0), 0 5px 5px 0 rgba(0, 0, 0, 0.24); */
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position:fixed;
+  bottom: 50;
+  left:50%;
+  border: none;
+  z-index: 9;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 100%;
+  padding: 10px;
+  background-color: #faeded;
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=text] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: none;
+  border-bottom: 1px solid rgb(201, 7, 250);
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=text]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: #E74C3C ;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+.btn-edit {
+  background: none;
+  border: none;
+  color: black;
+  padding: 6px 6px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btn-edit:hover {
+  background-color: RoyalBlue;
+}
+.btn-edit2 {
+  background: none;
+  border: none;
+  color: black;
+  padding: 6px 6px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.btn-edit2:hover {
+  background-color: green;
+}
+.btn-edit1 {
+  background: none;
+  border: none;
+  color: black;
+  padding: 6px 6px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.btn-edit1:hover {
+  background-color: red;
+}
+
+.card {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 0%;
+    box-shadow: 0 0px 2px 0 rgba(0,0,0,0.2);
+    background-color: faeded;
+    transition: 0.3s;
+    opacity: 0.9;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+ }
+
+ .card:hover{
+      opacity: 1;
+      background: white;
+      box-shadow: 0 0px 20px 0 rgba(0,0,0,1);
+ }
+
+.card-columns {
+  column-count: 1;
+}
+
+.card-footer{
+  width: 100%;
+  bottom: 0%;
+}
+
+.image{
+  height: 80%;
+  width: 70%;
+  display: block;
+  margin-left: 7%;
+  margin-right: auto;
+}
+ 
+</style>
+                <!-- <input type = 'text' placeholder="Add new task" name="task" Class="form-container"/> -->
+                <!-- <input type = 'submit' value="+"/> -->
+                <!-- <div></div> -->  
+                <hr>  
+                <!--  -->
+                <div class="center">
+                <img class="image" src="{{url_for('static', filename='todos.png')}}"/>
+                <button class="open-button" onclick="openForm()" data-toggle="modal" data-target="#myModal">ADD A NEW TASK</button><hr style="opacity: 0;">  
+                {% if tsklst==[] %}
+                <div style="text-align: center;width: 86%" class="alert alert-light" role="alert">
+                  No tasks available!
+                </div>
+                {% else %}
+                <div class="card-columns">
+                       {% for task in tasks %}
+                            <div class="card" style="width: 16rem; height: 18rem;">
+                              <div class="card-body  text-center">
+                                <h5 class="card-title"><b>{{ task.task }}</b></h5>
+                                {% if task.status=='Completed' %}
+                                <h6 id="tskstatus"><mark style="background-color: rgb(92, 165, 92);font-size: 16px; ">{{ task.status }}</mark></h6>
+                                {% else %}
+                                <h6 id="tskstatus"><mark style="background-color:rgb(236, 84, 84);font-size: 16px;">{{ task.status }}</mark></h6>
+                                {% endif %} 
+                                <!-- <h6 class="card-subtitle mb-2 text-muted">{{ task.status }}</h6> -->
+                                <p class="card-text">{{ task.description}}</p><br><br><br>
+                                <div class="card-footer">
+                                <button class="btn-edit2" title="update status" onclick=window.location.href="http://localhost:5000/updatestatus/{{task.id}}"><i class="fa fa-save"></i></button>
+                                <button class="btn-edit" title="edit task"onclick="openUpdate('{{task.id}}');setvalue('{{task.task}}','{{task.description}}','{{task.status}}')"><i class="fa fa-edit"></i></button>
+                                <button class="btn-edit1"title="delete task" onclick=window.location.href="http://localhost:5000/delete/{{task.id}}"><i class="fa fa-trash"></i></button>
+                                 </div>
+                              </div>
+                            </div>
+                            <script>
+                              $(function() {
+                                 $(".card-body").each(function() {
+                                     var hue = 'rgb(' + (Math.floor((256-199)*Math.random()) + 200) + ',' + (Math.floor((256-199)*Math.random()) + 200) + ',' + (Math.floor((256-199)*Math.random()) + 200) + ')';
+                                     $(this).css("background-color", hue);
+                                   });
+                                });
+                            </script>
+                            <!-- <td id="iptsknm">{{ task.task }}</td>
+                            {% if task.status=='Completed' %}
+                              <td id="tskstatus"><mark style="background-color: rgb(92, 165, 92);font-size: 16px; ">{{ task.status }}</mark></td>
+                            {% else %}
+                              <td id="tskstatus"><mark style="background-color:rgb(236, 84, 84);font-size: 16px;">{{ task.status }}</mark></td>
+                            {% endif %} 
+                             <td><button class="btn-edit2" title="update status" onclick=window.location.href="http://localhost:5000/updatestatus/{{task.id}}"><i class="fa fa-save"></i></button>
+                                <button class="btn-edit" title="edit task"onclick="openUpdate('{{task.id}}');setvalue('{{task.task}}','{{task.description}}','{{task.status}}')"><i class="fa fa-edit"></i></button>
+                                <button class="btn-edit1"title="delete task" onclick=window.location.href="http://localhost:5000/delete/{{task.id}}"><i class="fa fa-trash"></i></button></td> -->
+                       {% endfor %}
+                      {% endif %}
+                      </div>
+                  </div>
+                  </div>
+                <div class="form-popup" id="myForm" style="width:40%">
+                    <form id="formu" action="http://localhost:5000/addtask" class="form-container" method="POST">
+                      <h1 id="heading">Add Task and Description</h1>
+                  
+                      <label for="task"><b>Task Name</b></label><br>
+                      <input type="text" id="tsknm" placeholder="Enter Task" name="task" required><br>
+                  
+                      <label for="description"><b>Description</b></label><br>
+                      <input type="text" id="tskdsc" placeholder="Describe your task" name="description" required><br><br>
+                      <input type = "checkbox" name="chkstatus" id="chk"><label for="chk"><b> Completed?</b></label>
+                      
+                      <br><button type="submit" id="button" onclick="openForm()" class="btn">Add</button><br>
+                      <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+                  <!-- Update Form
+                  <div class="form-popup" id="myUpdate" style="width:40%">
+                    <form class="form-container" method="POST">
+                      <h1>Update Task</h1>
+                      <label for="updtask"><b>Task Name</b></label><br>
+                      <input type="text" placeholder="Enter Task" name="updtask" required><br>
+                  
+                      <label for="upddescription"><b>Description</b></label><br>
+                      <input type="text" placeholder="Describe your task" name="upddescription" required><br>                                      
+                      <button type="button"  class="btn">Update</button><br>
+                      <button type="button" class="btn cancel" onclick="closeUpdate()">Cancel</button>
+                    </form>
+                  </div>-->
+                  <script>
+                    function openForm() {
+                      document.getElementById("myForm").style.display = "block";
+                    }
+                    
+                    function closeForm() {
+                      document.getElementById("myForm").style.display = "none";
+                    }
+
+                    function openUpdate(id) {
+                      const element = document.getElementById("heading");
+                      element.innerHTML = "Update Task!";
+                      const  btn = document.getElementById("button");
+                      btn.innerHTML = "Update!";
+                      let tskid = id;
+                      document.getElementById("formu").action = "http://localhost:5000/edit/"+tskid;
+                      document.getElementById("myForm").style.display = "block";
+                    }
+
+                    function setvalue(task,description,status){
+                      document.getElementById("tsknm").value=task;
+                      document.getElementById("tskdsc").value=description;
+                      if(status=='Completed'){
+                        document.getElementById("chk").checked= true;
+                      }
+                      else{
+                        document.getElementById("chk").checked= false;
+                      }
+                    }
+
+                    function closeUpdate() {
+                      document.getElementById("myUpdate").style.display = "none";
+                    }
+                    
+                    </script> 
+                    {% endblock %} 
+    </body>
+</html>
+  </div>

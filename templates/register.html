@@ -1,0 +1,30 @@
+{% extends 'base.html'%}
+{% block content%}
+<section class="container">
+   <div class="row">
+      <div class="col">
+         <form class="form" action="" method="post">
+            <img class="center" src="{{url_for('static', filename='login.png')}}"/>
+            <p>
+               {{ form.first_name.label }}<br>
+               {{ form.first_name(size =32) }}
+            </p>
+            <p>
+               {{ form.last_name.label }}<br>
+               {{ form.last_name(size=32) }}
+            </p>
+            <p>
+               {{ form.email.label }}<br>
+               {{ form.email(size=32) }}
+            </p>
+            <p>
+               {{ form.password.label }}<br>
+               {{ form.password(size=32) }}
+            </p>
+            <p>{{ msg }}</p>
+            <p>{{ form.submit() }}</p>
+         </form>
+      </div>
+   </div>
+</section>
+{% endblock %}
