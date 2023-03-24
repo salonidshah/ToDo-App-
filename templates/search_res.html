@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.displayurl{
+    background-color: faeded;
+    opacity: 0.9;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    padding: 40px;
+}
+</style>
+<hr>
+<div class="displayurl">
+{% for key,value in dict1.items() %} 
+<br><a href="{{ key }}" target="blank">{{ key }}</a>
+<p>{{ value }}</p>
+{% endfor %}
+</div>
+{% endblock %}

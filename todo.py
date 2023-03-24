@@ -5,6 +5,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager,current_user, login_user,logout_user, login_required
 from forms import RegisterForm, LoginForm
 from flask_login import UserMixin
+from googlesearch import search
+import requests
+from bs4 import BeautifulSoup
 
 conn = sqlite3.connect('todo_data.db')
 print("Opened database successfully")
@@ -182,6 +185,19 @@ def deletetask(id):
    Tasks.query.filter_by(id=id,todo_owner = current_user.id).delete()
    db.session.commit()
    return redirect('/index')
+
+@app.route('/search',methods=['GET','POST'])
+def searchstr():
+   dict1={}
+   query=request.form["searchstr"]
+   for j in search(query):
+      reqs=requests.get(j)
+      soup = BeautifulSoup(reqs.text, 'html.parser')
+      for title in soup.find_all('title'):
+         dict1[j] = title.get_text()
+   print(dict1)
+   return render_template('search_res.html',dict1=dict1)
+
 
 @app.route('/users')
 def users():
