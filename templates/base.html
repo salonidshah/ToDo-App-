@@ -39,8 +39,8 @@
   justify-content: flex-end;
   }
   header p {
-  padding: 0 20px;
-  margin: 0;
+  padding: 0 15px;
+  font-size: 17px;
   color: brgb(40, 40, 80);
   }
   #round {
@@ -124,7 +124,6 @@
   margin-top: 8px;
   cursor: pointer;
   height: 38px;
-  z-index: 1;
 }
 
 .search-container button:hover {
@@ -144,8 +143,8 @@
            {%else%}
            <form action="http://localhost:5000/search" method="POST" class="search-container"><input name="searchstr" class="search-bar" type="text" placeholder="Search.."/>
             <button onclick=window.location.href="http://localhost:5000/search" type="submit"><i class="fa fa-search"></i></button></form>
-           <p><a href="{{ url_for('index_todo') }}">Home</a></p>
-           <p><a href="{{ url_for('logout') }}">Logout</a></p>
+           <p class="align-self-end"><a href="{{ url_for('index_todo') }}">Home</a></p>
+           <p class="align-self-end"><a href="{{ url_for('logout') }}">Logout</a></p>
            {% endif %}
         {% endblock %}
         </nav>

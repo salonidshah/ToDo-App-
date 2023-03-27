@@ -24,10 +24,16 @@
   opacity: 0.8;
   align-items: center;
   /* position: fixed; */
-  width:85%;
-  
-
+  width:86%;
 }
+
+.open-button:hover{
+  opacity: 1;
+  background: white;
+  transition: 0.5s;
+  box-shadow: 0 0px 20px 0 rgba(0,0,0,1);
+}
+
 .center {
   position: absolute;
   margin: auto;
@@ -180,7 +186,7 @@
                 {% else %}
                 <div class="card-columns">
                        {% for task in tasks %}
-                            <div class="card" style="width: 16rem; height: 18rem;">
+                            <div class="card" style="width: 18rem; height: 18rem;">
                               <div class="card-body  text-center">
                                 <h5 class="card-title"><b>{{ task.task }}</b></h5>
                                 {% if task.status=='Completed' %}
